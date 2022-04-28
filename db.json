@@ -1,0 +1,90 @@
+{
+    "departments": [
+        {
+            "id": 1,
+            "name_depart": "Phòng kế toán"
+        },
+        {
+            "id": 2,
+            "name_depart": "Phòng kiểm toán"
+        },
+        {
+            "id": 3,
+            "name_depart": "Phòng hành chính"
+        },
+        {
+            "id": 4,
+            "name_depart": "Phòng nhân sự"
+        }
+    ],
+    "users": [
+        {
+            "id": 1,
+            "name": "Bùi Quang Sơn",
+            "age": 23,
+            "email": "buiquangson@gmail.com",
+            "password": "123456",
+            "telephone": "0327568948",
+            "address": "Hải Dương",
+            "departId": [
+                1,
+                2
+            ],
+            "role": "admin"
+        },
+        {
+            "id": 2,
+            "name": "Nguyễn Thị Hạnh",
+            "age": 25,
+            "email": "hanhnguyen@gmail.com",
+            "password": "123456",
+            "telephone": "0327568123",
+            "address": "Hải Phòng",
+            "departId": [
+                1
+            ],
+            "role": "staff"
+        },
+        {
+            "id": 3,
+            "name": "Nguyễn Hữu Hùng",
+            "age": 30,
+            "email": "huuhung@gmail.com",
+            "password": "123456",
+            "telephone": "0323338948",
+            "address": "Hà Nội",
+            "departId": [
+                3
+            ],
+            "role": "staff"
+        },
+        {
+            "id": 4,
+            "name": "Đỗ Quang Tú",
+            "age": 27,
+            "email": "tuquangdo@gmail.com",
+            "password": "123456",
+            "telephone": "0323456723",
+            "address": "Đà Nẵng",
+            "departId": [
+                3,
+                4
+            ],
+            "role": "admin"
+        },
+        {
+            "id": 5,
+            "name": "Nguyễn Thị Hoa",
+            "age": 22,
+            "email": "hoanguyen@gmail.com",
+            "password": "123456",
+            "telephone": "0322347543",
+            "address": "Ninh Bình",
+            "departId": [
+                1,
+                4
+            ],
+            "role": "staff"
+        }
+    ]
+}
