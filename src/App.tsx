@@ -105,7 +105,7 @@ function App() {
                       <TableCell align="left">{user.telephone}</TableCell>
                       <TableCell align="left">{user.email}</TableCell>
                       
-                      <TableCell align="left">{user.departId[0]}</TableCell>
+                      <TableCell align="left">{user.departId[0] as number}</TableCell>
                       <TableCell align="left">
                         <Stack direction="row" spacing={2}>
                           <Button variant="outlined" startIcon={<DeleteIcon />}>Delete</Button>
