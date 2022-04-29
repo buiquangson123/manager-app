@@ -1,90 +1,116 @@
 {
-    "departments": [
-        {
-            "id": 1,
-            "name_depart": "Phòng kế toán"
-        },
-        {
-            "id": 2,
-            "name_depart": "Phòng kiểm toán"
-        },
-        {
-            "id": 3,
-            "name_depart": "Phòng hành chính"
-        },
-        {
-            "id": 4,
-            "name_depart": "Phòng nhân sự"
-        }
-    ],
-    "users": [
-        {
-            "id": 1,
-            "name": "Bùi Quang Sơn",
-            "age": 23,
-            "email": "buiquangson@gmail.com",
-            "password": "123456",
-            "telephone": "0327568948",
-            "address": "Hải Dương",
-            "departId": [
-                1,
-                2
-            ],
-            "role": "admin"
-        },
-        {
-            "id": 2,
-            "name": "Nguyễn Thị Hạnh",
-            "age": 25,
-            "email": "hanhnguyen@gmail.com",
-            "password": "123456",
-            "telephone": "0327568123",
-            "address": "Hải Phòng",
-            "departId": [
-                1
-            ],
-            "role": "staff"
-        },
-        {
-            "id": 3,
-            "name": "Nguyễn Hữu Hùng",
-            "age": 30,
-            "email": "huuhung@gmail.com",
-            "password": "123456",
-            "telephone": "0323338948",
-            "address": "Hà Nội",
-            "departId": [
-                3
-            ],
-            "role": "staff"
-        },
-        {
-            "id": 4,
-            "name": "Đỗ Quang Tú",
-            "age": 27,
-            "email": "tuquangdo@gmail.com",
-            "password": "123456",
-            "telephone": "0323456723",
-            "address": "Đà Nẵng",
-            "departId": [
-                3,
-                4
-            ],
-            "role": "admin"
-        },
-        {
-            "id": 5,
-            "name": "Nguyễn Thị Hoa",
-            "age": 22,
-            "email": "hoanguyen@gmail.com",
-            "password": "123456",
-            "telephone": "0322347543",
-            "address": "Ninh Bình",
-            "departId": [
-                1,
-                4
-            ],
-            "role": "staff"
-        }
-    ]
+  "departments": [
+    {
+      "id": 1,
+      "name_depart": "Phòng kế toán"
+    },
+    {
+      "id": 2,
+      "name_depart": "Phòng kiểm toán"
+    },
+    {
+      "id": 3,
+      "name_depart": "Phòng hành chính"
+    },
+    {
+      "id": 4,
+      "name_depart": "Phòng nhân sự"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "Bùi Quang Sơn",
+      "age": 23,
+      "email": "buiquangson@gmail.com",
+      "password": "123456",
+      "telephone": "0327568948",
+      "address": "Hải Dương",
+      "departId": [
+        1,
+        2
+      ],
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "name": "Nguyễn Thị Hạnh",
+      "age": 25,
+      "email": "hanhnguyen@gmail.com",
+      "password": "123456",
+      "telephone": "0327568123",
+      "address": "Hải Phòng",
+      "departId": [
+        1
+      ],
+      "role": "staff"
+    },
+    {
+      "id": 3,
+      "name": "Nguyễn Hữu Hùng",
+      "age": 30,
+      "email": "huuhung@gmail.com",
+      "password": "123456",
+      "telephone": "0323338948",
+      "address": "Hà Nội",
+      "departId": [
+        3
+      ],
+      "role": "staff"
+    },
+    {
+      "id": 4,
+      "name": "Đỗ Quang Tú",
+      "age": 27,
+      "email": "tuquangdo@gmail.com",
+      "password": "123456",
+      "telephone": "0323456723",
+      "address": "Đà Nẵng",
+      "departId": [
+        3,
+        4
+      ],
+      "role": "admin"
+    },
+    {
+      "name": "Nguyễn Thị Hoa",
+      "address": "Ninh Bình",
+      "age": 22,
+      "telephone": "0322347543",
+      "password": "123456",
+      "role": "staff",
+      "email": "hoanguyen@gmail.com",
+      "id": 5
+    },
+    {
+      "name": "Nguyễn Văn Thái ok",
+      "address": "Yên Bái",
+      "age": "22222",
+      "telephone": "0325869458",
+      "password": "12345678",
+      "role": "staff",
+      "email": "thainguyenvan@gmail.com",
+      "id": 6
+    },
+    {
+      "name": "ssssssssssssss",
+      "address": "add",
+      "age": 22,
+      "telephone": "123345452222",
+      "password": "123456",
+      "role": "staff",
+      "email": "hanhnguyen@gmail.com",
+      "id": 7
+    },
+    {
+      "name": "SON Bui Quang (VTI.P2)",
+      "address": "HN",
+      "age": 22,
+      "telephone": "123345452222",
+      "password": "2222",
+      "role": "admin",
+      "email": "son.buiquang@vti.com.vn",
+      "id": 8
+    }
+  ]
 }

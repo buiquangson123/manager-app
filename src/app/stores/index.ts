@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
-import userReducer from './infor/index'
+import inforReducer from './infor/index'
+import authenReducer from './authen/index'
 
 export const store = configureStore({
     reducer: {
-        infor: userReducer,
+        infor: inforReducer,
+        authen: authenReducer
     }
 })
 

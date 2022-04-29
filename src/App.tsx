@@ -14,11 +14,26 @@ import Stack from '@mui/material/Stack';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios'
 import {user} from './app/stores/infor/index'
-
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from './app/stores/index'
+import { updateStateUser, deleteUser } from './app/stores/infor/index'
+import FormAddUser from './app/modules/FormAddUser'
+import FormEditUser from './app/modules/FormEditUser'
+import { Link } from "react-router-dom";
 
 function App() {
   const [listUser, setListUser] = useState<user[]>([])
-  
+  const [loading, setLoading] = useState<boolean>(true)
+  const [add, setAdd] = useState<boolean>(false)
+  const [edit, setEdit] = useState<boolean>(false)
+  const [editUser, setEditUser] = useState<user>()
+  const dispatch = useDispatch()
+  const stateInfor: user[] = useSelector((state: any) => state.infor.users)
+  const stateAuthen = useSelector((state:any) => state.authen.authen)
+
+  console.log("stateInfor: ", stateInfor)
+
+
   function NavChildren({ icon, title, active
   }: { icon: string, title: string, active: boolean}) {
     return (
@@ -30,15 +45,47 @@ function App() {
   }
 
   useEffect( () => {
+    setLoading(true)
     const getAPI = async () => {
       const ListData = await axios.get('http://localhost:3004/users')
-      console.log("ListData: ",ListData.data)
       
-      setListUser(ListData.data)
+      if (ListData.data && ListData.data.length > 0) {
+        setListUser(ListData.data)
+        setLoading(false)
+        dispatch(updateStateUser(ListData.data))
+      }
+      
     }
     getAPI();
 
   }, [])
+
+  const handleAddUser = () => {
+    if(edit) setEdit(!edit)
+    setAdd(!add)
+  }
+
+  const handleDeleteUser = (id: number) => {
+    const deleteAPI = async () => {
+      await axios.delete(`http://localhost:3004/users/${id}`)
+      dispatch(deleteUser(id))
+    }
+    deleteAPI();
+  }
+
+  const handleEditUser = (id: number) => {
+    if (add) setAdd(!add)
+    const editAPI = async () => {
+      const userEdit = await axios.get(`http://localhost:3004/users/${id}`)
+      setEditUser(userEdit.data)
+    }
+    if (edit) {
+      editAPI();
+    } else {
+      setEdit(!edit)
+      editAPI();
+    }
+  }
   return (
     <div className="App">
       <div className='Nav fixed top-0 left-0 bottom-0 w-[300px] shadow-xl'>
@@ -48,7 +95,7 @@ function App() {
             alt="error img" 
             className='w-[40px] h-[40px] rounded-[100%]'
           />
-          <span className='leading-10 ml-3 text-gray-500 text-xl font-semibold uppercase'>Nguyễn Thị Hạnh</span>
+          {stateAuthen && <span className='leading-10 ml-3 text-gray-500 text-xl font-semibold uppercase'>{stateAuthen.name}</span>}
         </div>
         <div className='border w-[65%] border-stone-500r m-auto'></div>
         <div className='mx-5 mt-5'>
@@ -56,6 +103,7 @@ function App() {
             <NavChildren icon={"fa-user"} title={"User Profile"} active={true}/>
             <NavChildren icon={"fa-bell"} title={"Notification"} active={false}/>
             <NavChildren icon={"fa-gear"} title={"Setting"} active={false}/>
+            <Link to="/login">Login</Link>
           </ul>
         </div>
       </div>
@@ -72,12 +120,22 @@ function App() {
               </button>
             </div>
             <span><i className="leading-8 text-gray-700 text-lg fa-solid fa-bell hover:cursor-pointer"></i></span>
-            <span><i className="leading-8 text-gray-700 text-lg fa-solid fa-user hover:cursor-pointer"></i></span>
+            <div className="user-infor relative">
+              <i className="leading-8 text-gray-700 text-lg fa-solid fa-user hover:cursor-pointer"></i>
+              <div className='hidden absolute top-full right-0 bg-gray-300 w-[120px] rounded overflow-hidden'>
+                <ul className="">
+                  <li className="p-2 hover:bg-gray-500 hover:text-white hover:cursor-pointer">Thông tin</li>
+                  <li className="p-2 hover:bg-gray-500 hover:text-white hover:cursor-pointer">Đăng nhập</li>
+                  <li className="p-2 hover:bg-gray-500 hover:text-white hover:cursor-pointer">Thoát</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
-        {listUser ? 
+        {loading && <div>Loading....</div>}
+        {!loading && stateAuthen && stateInfor &&
           <div className='Container-body mt-5'>
-            <Button variant="outlined" startIcon={<AddIcon />}>Add</Button>
+            <Button variant="outlined" startIcon={<AddIcon />} onClick={handleAddUser}>Add</Button>
             <TableContainer component={Paper} className="mt-3">
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
@@ -88,11 +146,11 @@ function App() {
                     <TableCell width="10%">Số điện thoại</TableCell>
                     <TableCell width="15%">Email</TableCell>
                     <TableCell width="25%">Phòng ban</TableCell>
-                    <TableCell width="15%">Tùy chọn</TableCell>
+                    {stateAuthen.role === "admin" && <TableCell width="15%">Tùy chọn</TableCell> }
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {listUser.map(user => (
+                  {stateInfor.map(user => (
                     <TableRow
                       key={user.name}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -105,20 +163,25 @@ function App() {
                       <TableCell align="left">{user.telephone}</TableCell>
                       <TableCell align="left">{user.email}</TableCell>
                       
-                      <TableCell align="left">{user.departId[0] as number}</TableCell>
-                      <TableCell align="left">
-                        <Stack direction="row" spacing={2}>
-                          <Button variant="outlined" startIcon={<DeleteIcon />}>Delete</Button>
-                          <Button variant="contained" endIcon={<EditIcon />}>Edit</Button>
-                        </Stack>
-                      </TableCell>
+                      {/* <TableCell align="left">{user.departId[0] as number}</TableCell> */}
+                      { stateAuthen.role === "admin" && 
+                        <TableCell align="left">
+                          <Stack direction="row" spacing={2}>
+                            <Button variant="outlined" startIcon={<DeleteIcon />} onClick={() => handleDeleteUser(user.id)}>Delete</Button>
+                            <Button variant="contained" endIcon={<EditIcon />} onClick={() => handleEditUser(user.id)}>Edit</Button>
+                          </Stack>
+                        </TableCell> 
+                      }
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             </TableContainer>
           </div>
-        : <div>Loading....</div>}
+        }
+
+        {add && <FormAddUser add={add} setAdd={setAdd}></FormAddUser>}
+        {edit && editUser && <FormEditUser edit={edit} editUser={editUser}></FormEditUser>}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { createSlice, configureStore } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 export interface user {
     id: number,
@@ -22,19 +22,29 @@ const initialState: initialState = {
     search: ""
 }
 
-const userSlice = createSlice({
+const userSliceInfor = createSlice({
     name: 'infor',
     initialState,
     reducers: {
-        listUser: (state, action) => {
+        updateStateUser: (state, action) => {
             state.users = action.payload
         },
-        addUser: state => {
-            
+        addStateUser: (state, action) => {
+            state.users = [...state.users, action.payload]
+        },
+        deleteUser: (state, action) => {
+            state.users = state.users.filter((item) => item.id !== action.payload)
+        },
+        updateEditUser: (state, action) => {
+            const statePrev = [...state.users];
+            const stateNew = statePrev.map((item) =>
+                item.id === action.payload.id ? (item = { ...item, ...action.payload }) : item
+            );
+            state.users = stateNew
         }
     }
 })
 
-export const { listUser, addUser } = userSlice.actions
+export const { updateStateUser, addStateUser, deleteUser, updateEditUser } = userSliceInfor.actions
 
-export default userSlice.reducer
+export default userSliceInfor.reducer
