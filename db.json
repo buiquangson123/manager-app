@@ -26,10 +26,7 @@
       "password": "123456",
       "telephone": "0327568948",
       "address": "Hải Dương",
-      "departId": [
-        1,
-        2
-      ],
+      "departId": [1, 2],
       "role": "admin"
     },
     {
@@ -40,9 +37,7 @@
       "password": "123456",
       "telephone": "0327568123",
       "address": "Hải Phòng",
-      "departId": [
-        1
-      ],
+      "departId": [1],
       "role": "staff"
     },
     {
@@ -53,9 +48,7 @@
       "password": "123456",
       "telephone": "0323338948",
       "address": "Hà Nội",
-      "departId": [
-        3
-      ],
+      "departId": [3],
       "role": "staff"
     },
     {
@@ -66,21 +59,19 @@
       "password": "123456",
       "telephone": "0323456723",
       "address": "Đà Nẵng",
-      "departId": [
-        3,
-        4
-      ],
+      "departId": [3, 4],
       "role": "admin"
     },
     {
-      "name": "Nguyễn Thị Hoa",
+      "name": "Nguyễn Thị Hoa Hoa",
       "address": "Ninh Bình",
       "age": 22,
       "telephone": "0322347543",
       "password": "123456",
       "role": "staff",
       "email": "hoanguyen@gmail.com",
-      "id": 5
+      "id": 5,
+      "departId": [3, 4]
     },
     {
       "name": "Nguyễn Văn Thái ok",
@@ -90,7 +81,8 @@
       "password": "12345678",
       "role": "staff",
       "email": "thainguyenvan@gmail.com",
-      "id": 6
+      "id": 6,
+      "departId": [3, 4]
     },
     {
       "name": "ssssssssssssss",
@@ -100,17 +92,19 @@
       "password": "123456",
       "role": "staff",
       "email": "hanhnguyen@gmail.com",
-      "id": 7
+      "id": 7,
+      "departId": [3, 4]
     },
     {
-      "name": "SON Bui Quang (VTI.P2)",
+      "name": "SON Bui Quang (VTI.D10)",
       "address": "HN",
       "age": 22,
       "telephone": "123345452222",
       "password": "2222",
       "role": "admin",
       "email": "son.buiquang@vti.com.vn",
-      "id": 8
+      "id": 8,
+      "departId": [3, 4]
     }
   ]
 }
