@@ -1,31 +1,18 @@
-import React, { useEffect, useState } from "react";
 import { Formik } from "formik";
-import axios from "axios";
 import { useDispatch } from "react-redux";
 import FormInput from "./common/component/FormInput";
 import { user } from "../stores/infor/index";
 import { updateEditUser } from "../stores/infor/index";
 import FieldSelect from "./CustomSelect";
-import { handleDepartment } from "../../App"
+import { handleConvertNumberToString } from "../modules/common/helper/department.helper";
+import { updateMember } from "../api/member";
 
 interface EditForm {
   edit: boolean;
   editUser: user;
   setEdit: any;
-  listDepart: any
+  listDepart: any;
 }
-
-export const handletment = (arr: any, data: any) => {
-  let arrNew: any = [];
-  for (const x in arr) {
-    for (const y in data) {
-      if (arr[x] === data[y].name_depart) {
-        arrNew = [...arrNew, data[y].id];
-      }
-    }
-  }
-  return arrNew;
-};
 
 const FormEditUser = ({ edit, editUser, setEdit, listDepart }: EditForm) => {
   const dispatch = useDispatch();
@@ -39,29 +26,15 @@ const FormEditUser = ({ edit, editUser, setEdit, listDepart }: EditForm) => {
         password: editUser.password,
         role: editUser.role,
         email: editUser.email,
-        departId: handleDepartment(editUser.departId, listDepart)
+        departId: handleConvertNumberToString(editUser.departId, listDepart),
       }}
       onSubmit={(values) => {
-        const getDepartAPI = async () => {
-          const ListDataDepart = await axios.get(
-            "http://localhost:3004/departments"
-          );
-
-          if (ListDataDepart.data && ListDataDepart.data.length > 0) {
-            const updateEditAPI = async () => {
-              const dataEdit = await axios.put(
-                `http://localhost:3004/users/${editUser.id}`,
-                { ...values, departId: handletment(values.departId, ListDataDepart.data)}
-              );
-    
-              dispatch(updateEditUser(dataEdit.data));
-              setEdit(!edit);
-            };
-            updateEditAPI();
-          }
+        const submitEditUser = async () => {
+          const userEdited = await updateMember(values, editUser.id);
+          dispatch(updateEditUser(userEdited.data));
+          setEdit(!edit);
         };
-        getDepartAPI();
-
+        submitEditUser();
       }}
     >
       <FormInput>

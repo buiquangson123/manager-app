@@ -12,36 +12,19 @@ import EditIcon from "@mui/icons-material/Edit";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import AddIcon from "@mui/icons-material/Add";
-import axios from "axios";
 import { user } from "./app/stores/infor/index";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "./app/stores/index";
 import { updateStateUser, deleteUser } from "./app/stores/infor/index";
 import FormAddUser from "./app/modules/FormAddUser";
 import FormEditUser from "./app/modules/FormEditUser";
 import { Link } from "react-router-dom";
-import { isFulfilled } from "@reduxjs/toolkit";
-import CustomSelect from "./app/modules/CustomSelect";
-import { getListMember, deleteMember, editMember } from './app/api/member'
-import { getDepartment } from './app/api/department'
-
-
-export const handleDepartment = (arr: Number[], data: any) => {
-  let arrNew: any = [];
-  for (const x in arr) {
-    for (const y in data) {
-      if (arr[x] === data[y].id) {
-        arrNew = [...arrNew, data[y].name_depart];
-      }
-    }
-  }
-  return arrNew;
-  // return Object.assign({}, arrNew);
-};
+import { getListMember, deleteMember, editMember } from "./app/api/member";
+import { getDepartment } from "./app/api/department";
+import { handleConvertNumberToString } from "./app/modules/common/helper/department.helper";
+import NavChildren from "./app/modules/common/component/NavChildren";
 
 function App() {
   const [listDepart, setListDepart] = useState<any>([]);
-  const [depart, setDepart] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [add, setAdd] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(false);
@@ -51,38 +34,11 @@ function App() {
   const stateInfor: user[] = useSelector((state: any) => state.infor.users);
   const stateAuthen = useSelector((state: any) => state.authen.authen);
 
-  console.log("stateInfor: ", stateInfor)
-
-  function NavChildren({
-    icon,
-    title,
-    active,
-  }: {
-    icon: string;
-    title: string;
-    active: boolean;
-  }) {
-    return (
-      <li
-        className={`hover:bg-indigo-400 my-2 cursor-pointer p-3 rounded-md ${
-          active ? "bg-indigo-400 text-white" : ""
-        }`}
-      >
-        <i
-          className={` fa-solid ${icon} ${
-            active ? "bg-indigo-400 text-white" : "text-gray-500"
-          }`}
-        ></i>
-        <span className="text-lg ml-3">{title}</span>
-      </li>
-    );
-  }
-
-  useEffect( () => {
+  useEffect(() => {
     setLoading(true);
-    const handleAPI = async() => {
-      const listMember = await getListMember()
-      const listDepartment = await getDepartment()
+    const handleAPI = async () => {
+      const listMember = await getListMember();
+      const listDepartment = await getDepartment();
       if (listMember.data.length > 0) {
         setLoading(false);
         dispatch(updateStateUser(listMember.data));
@@ -91,8 +47,7 @@ function App() {
       if (listDepartment.data.length > 0) {
         setListDepart(listDepartment.data);
       }
-
-    }
+    };
     handleAPI();
   }, []);
 
@@ -102,23 +57,18 @@ function App() {
   };
 
   const handleDeleteUser = async (id: number) => {
-    const idUser = await deleteMember(id)
-    if (idUser !== null || idUser !== undefined || idUser !== "") dispatch(deleteUser(id));
+    const idUser = await deleteMember(id);
+    if (idUser !== null || idUser !== undefined || idUser !== "")
+      dispatch(deleteUser(id));
   };
 
   const handleEditUser = async (id: number) => {
     if (add) setAdd(!add);
-    const dataMember = await editMember(id)
+    const dataMember = await editMember(id);
     if (dataMember) setEditUser(dataMember.data);
     setEdit(!edit);
-
-    // if (edit) {
-    //   if (dataMember) setEditUser(dataMember.data);
-    // } else {
-    //   setEdit(!edit);
-    //   if (dataMember) setEditUser(dataMember.data);
-    // }
   };
+
   return (
     <div className="App">
       <div className="Nav fixed top-0 left-0 bottom-0 w-[300px] shadow-xl">
@@ -231,17 +181,10 @@ function App() {
                       <TableCell align="left">{user.email}</TableCell>
 
                       <TableCell align="left" className="depart">
-                        {handleDepartment(user.departId, listDepart).join(', ')}
-                        {/* {handleDepartment(user.departId, listDepart).map(
-                          (item: any, index: any) => (
-                            <span
-                              key={index}
-                              className="w-full p-1 bg-[#faebd7] rounded-[3px] text-[#d2691e] mb-1 text-center"
-                            >
-                              {item}
-                            </span>
-                          )
-                        )} */}
+                        {handleConvertNumberToString(
+                          user.departId,
+                          listDepart
+                        ).join(", ")}
                         {/* className="w-full p-1 bg-[#faebd7] rounded-[3px] text-[#d2691e] mb-1 text-center" */}
                       </TableCell>
                       {stateAuthen.role === "admin" && (
@@ -271,8 +214,6 @@ function App() {
             </TableContainer>
           </div>
         )}
-
-        {/* <CustomSelect></CustomSelect> */}
 
         {add && <FormAddUser add={add} setAdd={setAdd}></FormAddUser>}
         {edit && editUser && listDepart && (

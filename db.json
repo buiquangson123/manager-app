@@ -89,31 +89,20 @@
       "id": 5
     },
     {
-      "name": "Nguyễn Thị Hoa Nhung",
-      "address": "Yên Bái",
-      "age": 22,
-      "telephone": "12334545",
+      "name": "SON Bui Quang (VTI.D10)",
+      "address": "Quảng Ninh",
+      "age": 45,
+      "telephone": "0324589658",
       "password": "1111",
-      "role": "staff",
-      "email": "ssss@gmal",
+      "role": "admin",
+      "email": "sonbuiquang3261993@gmail.com",
       "departId": [
-        3
-      ],
-      "id": 6
-    },
-    {
-      "name": "Nguyễn Thị Hoa Nhung",
-      "address": "Yên Bái",
-      "age": 22,
-      "telephone": "12334545",
-      "password": "1111",
-      "role": "staff",
-      "email": "ssss@gmal",
-      "departId": [
+        2,
         3,
+        4,
         1
       ],
-      "id": 7
+      "id": 8
     }
   ]
 }
