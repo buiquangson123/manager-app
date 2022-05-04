@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getUser } from '../stores/authen/index'
+import { getListAccount } from '../api/member'
 
 
 const LoginForm = () => {
@@ -16,22 +17,31 @@ const LoginForm = () => {
                 email: ""
             }}
 
-            onSubmit={(values) => {
-                const getAPIUser = async () => {
-                    const user = await axios.get(`http://localhost:3004/users?email=${values.email}`)
-
-                    if(user.data.length > 0) {
-                        if (user.data[0].password === values.password) {
-                            dispatch(getUser(user.data[0]))
-                            history('/');
-                        } else {
-                            console.log("Email hoặc password sai!!!")
-                        }
+            onSubmit={async(values) => {
+                const listAccount = await getListAccount(values)
+                if (listAccount.data.length > 0) {
+                    if (listAccount.data[0].password === values.password) {
+                        dispatch(getUser(listAccount.data[0]))
+                        history('/');
                     } else {
                         console.log("Email hoặc password sai!!!")
                     }
                 }
-                getAPIUser();
+                // const getAPIUser = async () => {
+                //     const user = await axios.get(`http://localhost:3004/users?email=${values.email}`)
+
+                //     if(user.data.length > 0) {
+                //         if (user.data[0].password === values.password) {
+                //             dispatch(getUser(user.data[0]))
+                //             history('/');
+                //         } else {
+                //             console.log("Email hoặc password sai!!!")
+                //         }
+                //     } else {
+                //         console.log("Email hoặc password sai!!!")
+                //     }
+                // }
+                // getAPIUser();
             }}
         >
             <Form className="my-10 flex m-auto flex-col w-[300px]" >

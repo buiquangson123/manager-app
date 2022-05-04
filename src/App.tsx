@@ -21,20 +21,37 @@ import FormAddUser from "./app/modules/FormAddUser";
 import FormEditUser from "./app/modules/FormEditUser";
 import { Link } from "react-router-dom";
 import { isFulfilled } from "@reduxjs/toolkit";
+import CustomSelect from "./app/modules/CustomSelect";
+import { getListMember, deleteMember, editMember } from './app/api/member'
+import { getDepartment } from './app/api/department'
+
+
+export const handleDepartment = (arr: Number[], data: any) => {
+  let arrNew: any = [];
+  for (const x in arr) {
+    for (const y in data) {
+      if (arr[x] === data[y].id) {
+        arrNew = [...arrNew, data[y].name_depart];
+      }
+    }
+  }
+  return arrNew;
+  // return Object.assign({}, arrNew);
+};
 
 function App() {
-  const [listUser, setListUser] = useState<user[]>([]);
   const [listDepart, setListDepart] = useState<any>([]);
   const [depart, setDepart] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [add, setAdd] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(false);
   const [editUser, setEditUser] = useState<user>();
+
   const dispatch = useDispatch();
   const stateInfor: user[] = useSelector((state: any) => state.infor.users);
   const stateAuthen = useSelector((state: any) => state.authen.authen);
 
-  console.log("stateInfor: ", stateInfor);
+  console.log("stateInfor: ", stateInfor)
 
   function NavChildren({
     icon,
@@ -52,8 +69,8 @@ function App() {
         }`}
       >
         <i
-          className={`text-gray-500 fa-solid ${icon} ${
-            active ? "bg-indigo-400 text-white" : ""
+          className={` fa-solid ${icon} ${
+            active ? "bg-indigo-400 text-white" : "text-gray-500"
           }`}
         ></i>
         <span className="text-lg ml-3">{title}</span>
@@ -61,70 +78,46 @@ function App() {
     );
   }
 
-  useEffect(() => {
+  useEffect( () => {
     setLoading(true);
-    const getAPI = async () => {
-      const ListData = await axios.get("http://localhost:3004/users");
-
-      if (ListData.data && ListData.data.length > 0) {
-        setListUser(ListData.data);
+    const handleAPI = async() => {
+      const listMember = await getListMember()
+      const listDepartment = await getDepartment()
+      if (listMember.data.length > 0) {
         setLoading(false);
-        dispatch(updateStateUser(ListData.data));
+        dispatch(updateStateUser(listMember.data));
       }
-    };
-    const getDepartAPI = async () => {
-      const ListDataDepart = await axios.get(
-        "http://localhost:3004/departments"
-      );
 
-      if (ListDataDepart.data && ListDataDepart.data.length > 0) {
-        setListDepart(ListDataDepart.data);
-        console.log("ListDataDepart.data: ", ListDataDepart.data);
+      if (listDepartment.data.length > 0) {
+        setListDepart(listDepartment.data);
       }
-    };
-    getAPI();
-    getDepartAPI();
-  }, []);
 
-  const handleDepartment = (arr: Number[], data: any) => {
-    let arrNew: any = [];
-    for (const x in arr) {
-      for (const y in data) {
-        if (arr[x] === data[y].id) {
-          arrNew = [...arrNew, data[y].name_depart];
-        }
-      }
     }
-    console.log("arr to obj: ", Object.assign({}, arrNew));
-    return arrNew.join(", ");
-    // return Object.assign({}, arrNew);
-  };
+    handleAPI();
+  }, []);
 
   const handleAddUser = () => {
     if (edit) setEdit(!edit);
     setAdd(!add);
   };
 
-  const handleDeleteUser = (id: number) => {
-    const deleteAPI = async () => {
-      await axios.delete(`http://localhost:3004/users/${id}`);
-      dispatch(deleteUser(id));
-    };
-    deleteAPI();
+  const handleDeleteUser = async (id: number) => {
+    const idUser = await deleteMember(id)
+    if (idUser !== null || idUser !== undefined || idUser !== "") dispatch(deleteUser(id));
   };
 
-  const handleEditUser = (id: number) => {
+  const handleEditUser = async (id: number) => {
     if (add) setAdd(!add);
-    const editAPI = async () => {
-      const userEdit = await axios.get(`http://localhost:3004/users/${id}`);
-      setEditUser(userEdit.data);
-    };
-    if (edit) {
-      editAPI();
-    } else {
-      setEdit(!edit);
-      editAPI();
-    }
+    const dataMember = await editMember(id)
+    if (dataMember) setEditUser(dataMember.data);
+    setEdit(!edit);
+
+    // if (edit) {
+    //   if (dataMember) setEditUser(dataMember.data);
+    // } else {
+    //   setEdit(!edit);
+    //   if (dataMember) setEditUser(dataMember.data);
+    // }
   };
   return (
     <div className="App">
@@ -238,7 +231,7 @@ function App() {
                       <TableCell align="left">{user.email}</TableCell>
 
                       <TableCell align="left" className="depart">
-                        {handleDepartment(user.departId, listDepart)}
+                        {handleDepartment(user.departId, listDepart).join(', ')}
                         {/* {handleDepartment(user.departId, listDepart).map(
                           (item: any, index: any) => (
                             <span
@@ -279,12 +272,15 @@ function App() {
           </div>
         )}
 
+        {/* <CustomSelect></CustomSelect> */}
+
         {add && <FormAddUser add={add} setAdd={setAdd}></FormAddUser>}
-        {edit && editUser && (
+        {edit && editUser && listDepart && (
           <FormEditUser
             edit={edit}
             editUser={editUser}
             setEdit={setEdit}
+            listDepart={listDepart}
           ></FormEditUser>
         )}
       </div>
