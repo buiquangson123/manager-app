@@ -1,58 +1,54 @@
 import React from "react";
-import { Field, Form } from "formik";
+import { Field, Form, ErrorMessage } from "formik";
+import FieldInput from "./FieldInput";
+
+
+const arrField = [
+  {
+    name: "name",
+    label: "Họ và tên",
+    placeholder: "Nhập họ và tên"
+  },
+  {
+    name: "address",
+    label: "Địa chỉ",
+    placeholder: "Nhập địa chỉ"
+  },
+  {
+    name: "age",
+    label: "Tuổi",
+    placeholder: "Nhập tuổi"
+  },
+  {
+    name: "telephone",
+    label: "Số điện thoại",
+    placeholder: "Nhập số điện thoại"
+  },
+  {
+    name: "password",
+    label: "Mật khẩu",
+    placeholder: "Nhập mật khẩu"
+  },
+  {
+    name: "email",
+    label: "Email",
+    placeholder: "Nhập email"
+  },
+
+]
+  
 
 const FormInput = ({ children }: any) => {
   return (
     <Form className="my-10 flex m-auto flex-col w-[400px]">
-      <label htmlFor="name">Họ và tên</label>
-      <Field
-        name="name"
-        type="text"
-        className="mb-4 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-        placeholder="Nhập họ và tên"
-      />
 
-      <label htmlFor="address">Địa chỉ</label>
-      <Field
-        name="address"
-        type="text"
-        className="mb-4 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-        placeholder="Nhập địa chỉ"
-      />
+      {
+        arrField.map((item, index) => {
+          return <FieldInput key={index} label={item.label} name={item.name} placeholder={item.placeholder}></FieldInput>
+        })
+      }
 
-      <label htmlFor="age">Tuổi</label>
-      <Field
-        name="age"
-        type="text"
-        className="mb-4 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-        placeholder="Nhập tuổi"
-      />
-
-      <label htmlFor="telephone">Số điện thoại</label>
-      <Field
-        name="telephone"
-        type="text"
-        className="mb-4 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-        placeholder="Nhập số điện thoại"
-      />
-
-      <label htmlFor="password">Mật khẩu</label>
-      <Field
-        name="password"
-        type="text"
-        className="mb-4 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-        placeholder="Nhập mật khẩu"
-      />
-
-      <label htmlFor="email">Email</label>
-      <Field
-        name="email"
-        type="text"
-        className="mb-4 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-        placeholder="Nhập email"
-      />
-
-      <label htmlFor="role">Role</label>
+      <label htmlFor="role">Chức vụ</label>
       <Field
         as="select"
         name="role"
@@ -64,6 +60,7 @@ const FormInput = ({ children }: any) => {
         <option value="admin">Admin</option>
         <option value="staff">Staff</option>
       </Field>
+      <ErrorMessage name="role" component="span" className="text-red-400 mb-2"/>
 
       {children}
     </Form>

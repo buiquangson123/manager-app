@@ -1,12 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
-import inforReducer from './infor/index'
-import authenReducer from './authen/index'
+import sliceMemberInfor from './sliceMemberInfor/index'
+import sliceLogin from './sliceLogin/index'
 
 export const store = configureStore({
     reducer: {
-        infor: inforReducer,
-        authen: authenReducer
+        infor: sliceMemberInfor,
+        login: sliceLogin
     }
 })
-
-export type RootState = ReturnType<typeof store.getState>

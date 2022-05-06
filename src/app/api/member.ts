@@ -1,6 +1,7 @@
 import axios from "axios";
 import { handleConvertStringToNumber } from "../modules/common/helper/department.helper";
-import { getDepartment } from "../api/department";
+import { getDepartment } from "./department";
+import { user } from '../stores/sliceMemberInfor/index'
 
 export const getListAccount = async (values: any) => {
   const accounts = await axios.get(
@@ -42,4 +43,10 @@ export const updateMember = async (values: any, id: number) => {
     departId: handleConvertStringToNumber(values.departId, ListDataDepart.data),
   });
   return addMember;
+};
+
+
+export const filterMembers = async (search: string) => {
+  const filteredList = await axios.get(`http://localhost:3004/users?name_like=${search}`)
+  return filteredList;
 };

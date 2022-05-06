@@ -35,15 +35,14 @@
     {
       "name": "Nguyễn Thị Hạnh",
       "address": "Hải Phòng",
-      "age": 25,
+      "age": 22,
       "telephone": "0327568123",
-      "password": "123456",
+      "password": "12345678",
       "role": "staff",
       "email": "hanhnguyen@gmail.com",
       "departId": [
-        1,
-        3,
         2,
+        3,
         4
       ],
       "id": 2
@@ -80,29 +79,29 @@
       "address": "Ninh Bình",
       "age": 22,
       "telephone": "0322347543",
-      "password": "123456",
+      "password": "12345667",
       "role": "staff",
       "email": "hoanguyen@gmail.com",
       "departId": [
-        3
+        3,
+        2,
+        1
       ],
       "id": 5
     },
     {
-      "name": "SON Bui Quang (VTI.D10)",
-      "address": "Quảng Ninh",
-      "age": 45,
-      "telephone": "0324589658",
-      "password": "1111",
-      "role": "admin",
-      "email": "sonbuiquang3261993@gmail.com",
+      "name": "Nguyễn Thị Hoa Nhung",
+      "address": "Hải Dương",
+      "age": 123,
+      "telephone": "0325869458",
+      "password": "11111111",
+      "role": "staff",
+      "email": "hoanguyen@gmail.com",
       "departId": [
         2,
-        3,
-        4,
-        1
+        3
       ],
-      "id": 8
+      "id": 6
     }
   ]
 }

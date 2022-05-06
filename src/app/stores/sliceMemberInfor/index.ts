@@ -22,7 +22,7 @@ const initialState: initialState = {
     search: ""
 }
 
-const userSliceInfor = createSlice({
+const sliceMemberInfor = createSlice({
     name: 'infor',
     initialState,
     reducers: {
@@ -41,10 +41,13 @@ const userSliceInfor = createSlice({
                 item.id === action.payload.id ? (item = { ...item, ...action.payload }) : item
             );
             state.users = stateNew
+        },
+        filterUser: (state, action) => {
+            state.users = action.payload
         }
     }
 })
 
-export const { updateStateUser, addStateUser, deleteUser, updateEditUser } = userSliceInfor.actions
+export const { updateStateUser, addStateUser, deleteUser, updateEditUser, filterUser } = sliceMemberInfor.actions
 
-export default userSliceInfor.reducer
+export default sliceMemberInfor.reducer

@@ -1,4 +1,4 @@
-export default function NavChildren({
+export default function NavItem({
   icon,
   title,
   active,
