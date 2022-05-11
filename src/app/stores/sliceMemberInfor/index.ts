@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 export interface user {
     id: number,
     name: string,
-    age: number,
+    age: number | string,
     email: string,
     password: string,
     telephone: string,
@@ -44,10 +44,13 @@ const sliceMemberInfor = createSlice({
         },
         filterUser: (state, action) => {
             state.users = action.payload
+        },
+        test: (state) => {
+            console.log("test ok")
         }
     }
 })
 
-export const { updateStateUser, addStateUser, deleteUser, updateEditUser, filterUser } = sliceMemberInfor.actions
+export const { updateStateUser, addStateUser, deleteUser, updateEditUser, filterUser, test } = sliceMemberInfor.actions
 
 export default sliceMemberInfor.reducer

@@ -63,7 +63,7 @@ const FormEditUser = ({ edit, editUser, setEdit, listDepart }: EditForm) => {
       })}
       onSubmit={(values) => {
         const submitEdit = async () => {
-          const editedUser = await updateMember(values, editUser.id);
+          const editedUser = await updateMember(values as any, editUser.id);
           dispatch(updateEditUser(editedUser.data));
           setEdit(!edit);
           history("/");
