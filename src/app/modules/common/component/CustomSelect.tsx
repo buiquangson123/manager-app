@@ -1,6 +1,7 @@
 import { Field, ErrorMessage } from "formik";
 import React, { Fragment } from "react";
 import Select from "react-select";
+import { department } from "../../../api/department";
 
 interface DepartmentOption {
   value: string;
@@ -8,12 +9,12 @@ interface DepartmentOption {
 }
 
 function FormikSelect({ field, form, listDepart }: any) {
-  const departmentOption: DepartmentOption[] = listDepart.reduce((acc: any, cur: any) => {
+  const departmentOption: DepartmentOption[] = listDepart.reduce((acc: DepartmentOption[], cur: department) => {
     return [...acc, { value: cur.name_depart, label: cur.name_depart }]
   }, [])
 
   const defaultValue = () => {
-    let valueDefault: any = [];
+    let valueDefault: DepartmentOption[] = [];
     for (let item in form.values.departId) {
       for (let color in departmentOption) {
         if (departmentOption[color].value === form.values.departId[item]) {
@@ -33,7 +34,7 @@ function FormikSelect({ field, form, listDepart }: any) {
         name={field.name}
         defaultValue={defaultValue || ""}
         onChange={(option: any) => {
-          const selectedOption = option.map((item: any) => item.value);
+          const selectedOption = option.map((item: DepartmentOption) => item.value);
           form.setFieldValue(field.name, selectedOption);
         }}
         className="mb-3"

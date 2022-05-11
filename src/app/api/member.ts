@@ -3,7 +3,9 @@ import { handleConvertStringToNumber } from "../modules/common/helper/department
 import { getDepartment } from "./department";
 import { user } from '../stores/sliceMemberInfor/index'
 
-export const getListAccount = async (values: any) => {
+import { FormLogin } from '../../app/modules/FormLogin'
+
+export const getListAccount = async (values: FormLogin) => {
   const accounts = await axios.get(
     `http://localhost:3004/users?email=${values.email}`
   );
@@ -25,21 +27,21 @@ export const editMember = async (id: number) => {
   return dataMember;
 };
 
-export const addMember = async (values: any) => {
+export const addMember = async (values: user) => {
   const ListDataDepart = await getDepartment();
   const addMember = await axios.post("http://localhost:3004/users", {
     ...values,
-    age: parseInt(values.age),
+    age: parseInt(values.age as string),
     departId: handleConvertStringToNumber(values.departId, ListDataDepart.data),
   });
   return addMember;
 };
 
-export const updateMember = async (values: any, id: number) => {
+export const updateMember = async (values: user, id: number) => {
   const ListDataDepart = await getDepartment();
   const addMember = await axios.put(`http://localhost:3004/users/${id}`, {
     ...values,
-    age: parseInt(values.age),
+    age: parseInt(values.age as string),
     departId: handleConvertStringToNumber(values.departId, ListDataDepart.data),
   });
   return addMember;

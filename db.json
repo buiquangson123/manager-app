@@ -42,7 +42,6 @@
       "email": "hanhnguyen@gmail.com",
       "departId": [
         2,
-        3,
         4
       ],
       "id": 2
@@ -84,7 +83,6 @@
       "email": "hoanguyen@gmail.com",
       "departId": [
         3,
-        2,
         1
       ],
       "id": 5
@@ -98,8 +96,7 @@
       "role": "staff",
       "email": "hoanguyen@gmail.com",
       "departId": [
-        2,
-        3
+        2
       ],
       "id": 6
     }

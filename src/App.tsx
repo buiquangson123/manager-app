@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
 import "./styles/index.css";
-import { user } from "./app/stores/sliceMemberInfor/index";
-import { useSelector, useDispatch } from "react-redux";
+import { test, user } from "./app/stores/sliceMemberInfor/index";
+import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
 import { updateStateUser, deleteUser } from "./app/stores/sliceMemberInfor/index";
 import FormAddUser from "./app/modules/common/component/FormAddUser";
 import FormEditUser from "./app/modules/common/component/FormEditUser";
 import { getListMember, deleteMember, editMember } from "./app/api/member";
-import { getDepartment } from "./app/api/department";
+import { department, getDepartment } from "./app/api/department";
 import MainTable from './app/modules/MainTable'
 import Header from './app/modules/Header'
 import NavBar from "./app/modules/NavBar";
+import { AppDispatch, RootState } from "./app/stores";
 
 function App() {
-  const [listDepart, setListDepart] = useState<any>([]);
+  const [listDepart, setListDepart] = useState<department[]>();
   const [loading, setLoading] = useState<boolean>(true);
   const [add, setAdd] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(false);
@@ -22,6 +23,19 @@ function App() {
   const stateInfor: user[] = useSelector((state: any) => state.infor.users);
   const stateLogin = useSelector((state: any) => state.login.account)
   const stateAccount = checkStateAccount() || {}
+
+  //Start useAppDispatch , useAppSelector
+
+  const useAppDispatch = () => useDispatch<AppDispatch>()
+  const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+
+  const stateNew = useAppSelector((state) => state.infor.users)
+  const dispatch1 = useAppDispatch()
+
+  console.log("useAppSelector stateNew: ", stateNew)
+  console.log("useAppSelector stateNew: ", dispatch1(test()))
+
+  // End useAppDispatch , useAppSelector
 
   function checkStateAccount() {
     if (stateLogin.length > 0) return stateLogin
@@ -71,15 +85,15 @@ function App() {
 
         <Header stateAccount={stateAccount}></Header>
 
-        <MainTable 
+        {listDepart && <MainTable 
           loading = {loading}
           stateAccount={stateAccount}
           stateInfor ={stateInfor}
-          listDepart = {listDepart}
+          listDepart={listDepart as any}
           handleAddUser = {handleAddUser}
           handleDeleteUser = {handleDeleteUser}
           handleEditUser = {handleEditUser}
-        ></MainTable>
+        ></MainTable>}
 
         {add && listDepart && <FormAddUser add={add} setAdd={setAdd} listDepart={listDepart}></FormAddUser>}
         {edit && editUser && listDepart && (

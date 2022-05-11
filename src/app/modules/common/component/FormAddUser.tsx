@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import { addStateUser } from "../../../stores/sliceMemberInfor/index";
+import { addStateUser, user } from "../../../stores/sliceMemberInfor/index";
 import { useDispatch } from "react-redux";
 import FormInput from "./FormInput";
 import FieldSelect from "./CustomSelect";
@@ -25,7 +25,7 @@ const FormAddUser = ({ add, setAdd, listDepart }: AddForm) => {
         role: "",
         email: "",
         departId: [],
-      }}
+      }} 
       validationSchema={Yup.object({
         name: Yup.string()
           .min(15, 'Ít nhất 15 kí tự hoặc hơn')
@@ -57,7 +57,7 @@ const FormAddUser = ({ add, setAdd, listDepart }: AddForm) => {
       })}
       onSubmit={(values) => {
         const submitAdd = async () => {
-          const addedUser = await addMember(values);
+          const addedUser = await addMember(values as any);
           dispatch(addStateUser(addedUser.data));
           setAdd(!add);
         };

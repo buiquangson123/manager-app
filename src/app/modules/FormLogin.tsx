@@ -6,6 +6,11 @@ import { getListAccount } from "../api/member";
 import { useState } from "react";
 import { user } from "../stores/sliceMemberInfor";
 
+export interface FormLogin {
+  password: string,
+  email: string
+}
+
 const FormLogin = () => {
   const dispatch = useDispatch();
   const history = useNavigate();
