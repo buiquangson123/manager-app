@@ -4,12 +4,12 @@ import { useDispatch } from "react-redux";
 import FormInput from "./FormInput";
 import FieldSelect from "./CustomSelect";
 import { addMember } from "../../../api/member";
-import * as Yup from 'yup';
+import * as Yup from "yup";
 
 interface AddForm {
   add: boolean;
   setAdd: any;
-  listDepart: any
+  listDepart: any;
 }
 
 const FormAddUser = ({ add, setAdd, listDepart }: AddForm) => {
@@ -25,35 +25,31 @@ const FormAddUser = ({ add, setAdd, listDepart }: AddForm) => {
         role: "",
         email: "",
         departId: [],
-      }} 
+      }}
       validationSchema={Yup.object({
         name: Yup.string()
-          .min(15, 'Ít nhất 15 kí tự hoặc hơn')
-          .required('Bạn cần nhập họ và tên'),
-        address: Yup.string()
-          .required('Bạn cần nhập địa chỉ'),
+          .min(5, "Ít nhất 15 kí tự hoặc hơn")
+          .required("Bạn cần nhập họ và tên"),
+        address: Yup.string().required("Bạn cần nhập địa chỉ"),
         email: Yup.string()
-          .email('Email chưa đúng định dạng')
-          .required('Bạn cần nhập email'),
+          .email("Email chưa đúng định dạng")
+          .required("Bạn cần nhập email"),
         password: Yup.string()
-          .required('Bạn cần nhập mật khẩu')
-          .min(8, 'Mật khẩu cần ít nhất 8 kí tự'),
+          .required("Bạn cần nhập mật khẩu")
+          .min(8, "Mật khẩu cần ít nhất 8 kí tự"),
         age: Yup.number()
-          .typeError('Tuổi phải là số')
-          .positive('Tuổi phải lớn hơn 0')
-          .required('Bạn cần nhập tuổi'),
+          .typeError("Tuổi phải là số")
+          .positive("Tuổi phải lớn hơn 0")
+          .required("Bạn cần nhập tuổi"),
         telephone: Yup.number()
-          .typeError('Số điện thoại phải là số')
-          .required('Bạn cần nhập số điện thoại'),
+          .typeError("Số điện thoại phải là số")
+          .required("Bạn cần nhập số điện thoại"),
         role: Yup.string()
-          .oneOf(
-            ['admin', 'staff'],
-            'Bạn cần chọn chức vụ'
-          )
-          .required('Bạn cần chọn chức vụ'),
+          .oneOf(["admin", "staff"], "Bạn cần chọn chức vụ")
+          .required("Bạn cần chọn chức vụ"),
         departId: Yup.array()
           .min(1, "Cần chọn ít nhất một phòng ban")
-          .required('Bạn cần chọn phòng ban'),
+          .required("Bạn cần chọn phòng ban"),
       })}
       onSubmit={(values) => {
         const submitAdd = async () => {

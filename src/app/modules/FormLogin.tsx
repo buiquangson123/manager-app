@@ -7,14 +7,14 @@ import { useState } from "react";
 import { user } from "../stores/sliceMemberInfor";
 
 export interface FormLogin {
-  password: string,
-  email: string
+  password: string;
+  email: string;
 }
 
 const FormLogin = () => {
   const dispatch = useDispatch();
   const history = useNavigate();
-  const [error, setError] = useState("")
+  const [error, setError] = useState("");
   return (
     <Formik
       initialValues={{
@@ -24,19 +24,22 @@ const FormLogin = () => {
       onSubmit={async (values) => {
         const listAccount = await getListAccount(values);
         if (listAccount.data.length > 0) {
-          const account = listAccount.data.filter((item: user) => item.password === values.password)
+          const account = listAccount.data.filter(
+            (item: user) => item.password === values.password
+          );
           if (account.length > 0) {
-            localStorage.setItem('Account', JSON.stringify(account[0]));
+            localStorage.setItem("Account", JSON.stringify(account[0]));
             dispatch(getUser(account[0]));
             history("/");
           } else {
             setError("Email hoặc password không đúng!");
           }
+        } else {
+          setError("Email hoặc password không đúng!");
         }
       }}
     >
       <Form className="my-10 flex m-auto flex-col w-[300px]">
-        
         <label htmlFor="email">Email</label>
         <Field
           name="email"
