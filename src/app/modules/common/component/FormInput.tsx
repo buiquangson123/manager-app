@@ -38,9 +38,9 @@ const arrField = [
 ]
   
 
-const FormInput = ({ children }: any) => {
+const FormInput = ({ children, showOverlay }: any) => {
   return (
-    <Form className="my-10 flex m-auto flex-col w-[400px]">
+    <Form className={`${showOverlay ? "absolute left-[16%] pb-8" : ""} my-14 flex m-auto flex-col w-[400px]`}>
 
       {
         arrField.map((item, index) => {

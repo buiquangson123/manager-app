@@ -31,6 +31,8 @@ const StaffEdit = () => {
                 editUser={editUser}
                 setEdit={setEdit}
                 listDepart={listDepart}
+                showOverlay={false}
+                setShowOverlay={setEdit}
             ></FormEditUser>}
         </div>
     )

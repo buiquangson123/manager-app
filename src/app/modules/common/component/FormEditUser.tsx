@@ -10,13 +10,15 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from 'yup'; 
 
 interface EditForm {
-  edit: boolean;
-  editUser: user;
-  setEdit: any;
-  listDepart: any;
+  edit: boolean,
+  editUser: user,
+  setEdit: any,
+  listDepart: any,
+  showOverlay: boolean,
+  setShowOverlay: (isShow: boolean) => void
 }
 
-const FormEditUser = ({ edit, editUser, setEdit, listDepart }: EditForm) => {
+const FormEditUser = ({ edit, editUser, setEdit, listDepart, setShowOverlay, showOverlay }: EditForm) => {
   const dispatch = useDispatch();
   const history = useNavigate();
  
@@ -66,12 +68,13 @@ const FormEditUser = ({ edit, editUser, setEdit, listDepart }: EditForm) => {
           const editedUser = await updateMember(values as any, editUser.id);
           dispatch(updateEditUser(editedUser.data));
           setEdit(!edit);
+          setShowOverlay(false)
           history("/");
         };
         submitEdit();
       }}
     >
-      <FormInput>
+      <FormInput showOverlay={showOverlay}>
         <FieldSelect listDepart={listDepart}></FieldSelect>
         
         <button

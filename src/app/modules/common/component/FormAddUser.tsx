@@ -5,14 +5,16 @@ import FormInput from "./FormInput";
 import FieldSelect from "./CustomSelect";
 import { addMember } from "../../../api/member";
 import * as Yup from 'yup';
+import { OverLay } from "../../overlay/overlay.template";
 
 interface AddForm {
-  add: boolean;
-  setAdd: any;
-  listDepart: any
+  listDepart: any,
+  showOverlay: boolean,
+  setShowOverlay: (isShow: boolean) => void,
+  setAdd: (add: boolean) => void,
 }
 
-const FormAddUser = ({ add, setAdd, listDepart }: AddForm) => {
+const FormAddUser = ({ listDepart, setShowOverlay, setAdd, showOverlay }: AddForm) => {
   const dispatch = useDispatch();
   return (
     <Formik
@@ -59,12 +61,13 @@ const FormAddUser = ({ add, setAdd, listDepart }: AddForm) => {
         const submitAdd = async () => {
           const addedUser = await addMember(values as any);
           dispatch(addStateUser(addedUser.data));
-          setAdd(!add);
+          setShowOverlay(false)
+          setAdd(false)
         };
         submitAdd();
       }}
     >
-      <FormInput>
+      <FormInput showOverlay={showOverlay}>
         <FieldSelect listDepart={listDepart}></FieldSelect>
         <button
           type="submit"

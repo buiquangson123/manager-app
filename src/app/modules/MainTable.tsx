@@ -1,4 +1,4 @@
-import { Fragment } from "react"
+import { Fragment, useEffect, useMemo, useState } from "react"
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -11,8 +11,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import AddIcon from "@mui/icons-material/Add";
+import Pagination from "@mui/material/Pagination";
 import { handleConvertNumberToString } from './common/helper/department.helper'
 import { user } from '../stores/sliceMemberInfor/index'
+import { getListMember } from "../api/member";
+import { handleCurrentPage } from "./pagination/pagination.component";
 
 interface ListDepart {
     id: number,
@@ -26,8 +29,10 @@ interface MainTable {
     listDepart: ListDepart,
     handleAddUser: () => void,
     handleDeleteUser: (id:number) => void,
-    handleEditUser: (id:number) => void
+    handleEditUser: (id:number) => void,
 }
+
+let PageSize = 3;
 
 const MainTable = ({
     loading,
@@ -36,12 +41,38 @@ const MainTable = ({
     listDepart,
     handleAddUser,
     handleDeleteUser,
-    handleEditUser 
+    handleEditUser,
 }: MainTable) => {
+
+    const [stateInforUpdate, setSateInforUpdate] = useState<user[]>(stateInfor);
+    const [currentTableData, setCurrentTableData] = useState<user[]>(
+        handleCurrentPage(parseInt(localStorage.getItem("currentPage") as string) || 1, stateInforUpdate, PageSize)
+    );
+    const [page, setPage] = useState(parseInt(localStorage.getItem("currentPage") as string) || 1)
+
+    useEffect(() => {
+        setSateInforUpdate(stateInfor);
+        const getCurrPage = parseInt(localStorage.getItem("currentPage") as string);
+        if (Math.ceil(stateInfor.length / PageSize) < getCurrPage) setPage(getCurrPage-1) //delete all last page => active button page-1
+        if (getCurrPage)
+            return setCurrentTableData(handleCurrentPage(getCurrPage, stateInfor, PageSize));
+    }, [stateInfor]);
+
+    const handlePagination = (
+        e: React.ChangeEvent<unknown>,
+        currPage: number
+    ) => {
+        localStorage.setItem("currentPage", currPage as any);
+        setCurrentTableData(handleCurrentPage(currPage, stateInforUpdate, PageSize));
+        setPage(currPage as any)
+    };
+
+
+
     return (
         <Fragment>
             {loading && <div className="loader m-auto"></div> }
-            {!loading && stateAccount.id >= 0 && stateInfor && listDepart && (
+            {!loading && stateAccount.id >= 0 &&  listDepart && currentTableData.length && (
                 <div className="Container-body mt-5">
                     {stateAccount.role === "admin" && <Button
                         variant="outlined"
@@ -66,13 +97,13 @@ const MainTable = ({
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {stateInfor.map((user) => (
+                                {currentTableData.map((user) => (
                                     <TableRow
-                                        key={user.name}
+                                        key={`${user.name}-${user.id}`}
                                         sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                                     >
                                         <TableCell component="th" scope="row">
-                                            {user.name}
+                                            {user.name} - {user.id}
                                         </TableCell>
                                         <TableCell align="left">{user.address}</TableCell>
                                         <TableCell align="left">{user.age}</TableCell>
@@ -112,6 +143,22 @@ const MainTable = ({
                             </TableBody>
                         </Table>
                     </TableContainer>
+                    <Pagination
+                        className="flex justify-center my-6"
+                        page={page}
+                        count={Math.ceil(stateInfor.length / PageSize)}
+                        onChange={(e: React.ChangeEvent<unknown>, currPage: number) =>
+                            handlePagination(e, currPage)
+                        }
+                    />
+                    {/* custom hook pagination
+                        <Pagination 
+                            onPageChange={(page:any) => setCurrentPage(page)}
+                            totalCount={stateInfor.length}
+                            siblingCount={1}
+                            currentPage={currentPage}
+                            pageSize={PageSize}
+                        ></Pagination> */}
                 </div>
             )
             }

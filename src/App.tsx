@@ -11,29 +11,34 @@ import MainTable from './app/modules/MainTable'
 import Header from './app/modules/Header'
 import NavBar from "./app/modules/NavBar";
 import { AppDispatch, RootState } from "./app/stores";
+import Overlay from "./app/modules/overlay/overlay.template";
 
 function App() {
   const [listDepart, setListDepart] = useState<department[]>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [add, setAdd] = useState<boolean>(false);
+
   const [edit, setEdit] = useState<boolean>(false);
+  const [add, setAdd] = useState<boolean>(false);
+  const [showDelete, setShowDelete] = useState<boolean>(false);
   const [editUser, setEditUser] = useState<user>();
+  const [showOverlay, setShowOverlay] = useState<boolean>(false)
 
   const dispatch = useDispatch();
   const stateInfor: user[] = useSelector((state: any) => state.infor.users);
   const stateLogin = useSelector((state: any) => state.login.account)
   const stateAccount = checkStateAccount() || {}
+  
 
   //Start useAppDispatch , useAppSelector
 
-  const useAppDispatch = () => useDispatch<AppDispatch>()
-  const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+  // const useAppDispatch = () => useDispatch<AppDispatch>()
+  // const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 
-  const stateNew = useAppSelector((state) => state.infor.users)
-  const dispatch1 = useAppDispatch()
+  // const stateNew = useAppSelector((state) => state.infor.users)
+  // const dispatch1 = useAppDispatch()
 
-  console.log("useAppSelector stateNew: ", stateNew)
-  console.log("useAppSelector stateNew: ", dispatch1(test()))
+  // console.log("useAppSelector stateNew: ", stateNew)
+  // console.log("useAppSelector stateNew: ", dispatch1(test()))
 
   // End useAppDispatch , useAppSelector
 
@@ -61,21 +66,42 @@ function App() {
 
   const handleAddUser = () => {
     if (edit) setEdit(!edit);
-    setAdd(!add);
+    setAdd(!add)
+    setShowOverlay(!showOverlay)
   };
 
   const handleDeleteUser = async (id: number) => {
-    const idUser = await deleteMember(id);
-    if (idUser !== null || idUser !== undefined || idUser !== "")
-      dispatch(deleteUser(id));
+    setShowDelete(!showDelete)
+    if (!showOverlay) {
+      setShowOverlay(!showOverlay)
+      localStorage.setItem("idDelete", id as any)
+    } else {
+      const idUser = await deleteMember(id);
+      if (idUser !== null || idUser !== undefined || idUser !== "")
+        dispatch(deleteUser(id));
+    }
   };
 
   const handleEditUser = async (id: number) => {
-    if (add) setAdd(!add);
     const dataMember = await editMember(id);
     if (dataMember) setEditUser(dataMember.data);
     setEdit(!edit);
+    setShowOverlay(!showOverlay)
   };
+
+  const handleSubmitDelete = () => {
+    if (localStorage.getItem("idDelete") !== null) handleDeleteUser(parseInt(localStorage.getItem("idDelete") as any))
+    setShowOverlay(!showOverlay)
+    if (!showOverlay) localStorage.removeItem("idDelete")
+    setShowDelete(false)
+  }
+
+  const handleCloseOverlay = () => {
+    setShowOverlay(false)
+    if (add) setAdd(!add)
+    if (showDelete) setShowDelete(!showDelete)
+    if (edit) setEdit(!edit)
+  }
 
   return (
     <div className="App">
@@ -94,18 +120,86 @@ function App() {
           handleDeleteUser = {handleDeleteUser}
           handleEditUser = {handleEditUser}
         ></MainTable>}
-
-        {add && listDepart && <FormAddUser add={add} setAdd={setAdd} listDepart={listDepart}></FormAddUser>}
-        {edit && editUser && listDepart && (
-          <FormEditUser
-            edit={edit}
-            editUser={editUser}
-            setEdit={setEdit}
-            listDepart={listDepart}
-          ></FormEditUser>
-        )}
-
       </div>
+
+
+      <Overlay 
+        showOverlay={showOverlay} 
+        setShowOverlay={setShowOverlay} 
+        handleDeleteUser={handleDeleteUser} 
+        listDepart={listDepart as department[]}
+        add={add}
+        setAdd={setAdd}
+        showDelete={showDelete}
+        setShowDelete={setShowDelete}
+        edit={edit}
+        setEdit={setEdit}
+      >
+        { add && 
+          <div className="relative w-[600px] m-auto h-[800px] rounded-lg shadow-md bg-white mt-[70px] overflow-y-auto">
+            <div
+              className="absolute top-0 right-0 text-[24px] mr-[10px] mt-[4px] cursor-pointer"
+              onClick={() => handleCloseOverlay()}
+            >
+              <i className="fa-solid fa-xmark"></i>
+            </div>
+            <FormAddUser
+              listDepart={listDepart}
+              showOverlay={showOverlay} 
+              setShowOverlay={setShowOverlay} 
+              setAdd={setAdd}
+            ></FormAddUser> 
+          </div>
+        }
+        {showDelete && 
+          <div className="relative w-[450px] m-auto h-[300px] rounded-lg shadow-md bg-white mt-[300px]">
+            <div
+              className="absolute top-0 right-0 text-[24px] mr-[10px] mt-[4px] cursor-pointer"
+              onClick={() => handleCloseOverlay()}
+            >
+              <i className="fa-solid fa-xmark"></i>
+            </div>
+            <div className="pt-20 flex justify-center">
+              <span className="text-black text-[20px] font-semibold">
+                Bạn có muốn xóa hay không?
+              </span>
+            </div>
+            <div className="mt-[50px] flex justify-center space-x-4">
+              <button
+                className="w-[160px] h-[40px] rounded-md shadow-md border hover:bg-slate-200 "
+                onClick={() => handleCloseOverlay()}
+              >
+                Hủy bỏ
+              </button>
+              <button
+                className="w-[160px] h-[40px] bg-blue-500 rounded-md shadow-md border hover:bg-[#6090de]"
+                onClick={() => handleSubmitDelete()}
+              >
+                Đồng ý
+              </button>
+            </div>
+          </div>
+        }
+
+        { edit && 
+          <div className="relative w-[600px] m-auto h-[800px] rounded-lg shadow-md bg-white mt-[70px] overflow-y-auto">
+            <div
+              className="absolute top-0 right-0 text-[24px] mr-[10px] mt-[4px] cursor-pointer"
+              onClick={() => handleCloseOverlay()}
+            >
+              <i className="fa-solid fa-xmark"></i>
+            </div>
+            {editUser && <FormEditUser
+              edit={edit}
+              editUser={editUser}
+              setEdit={setEdit}
+              listDepart={listDepart}
+              showOverlay={showOverlay} 
+              setShowOverlay={setShowOverlay}
+            ></FormEditUser>}
+          </div>
+        }
+      </Overlay> 
     </div>
   );
 }
